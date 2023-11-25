@@ -1,0 +1,83 @@
+<h1 class="text-center">{{empresa}}</h1>
+
+<div class="btn-group d-flex" role="group" aria-label="Basic example">
+  <button [disabled]="empresaBtn" type="button" class="btn btn-primary" (click)="createEmpresa()">Crear Empresa</button>
+  <button type="button" data-bs-toggle="modal" data-bs-target="#departamento" class="btn btn-primary">Crear
+    Departamento</button>
+  <button type="button" data-bs-toggle="modal" data-bs-target="#empleado" class="btn btn-primary" (click)="openEmpleadoModal(true)">Crear Empleado</button>
+</div>
+
+<div *ngIf="existEmpleados" >
+  <div class="row pt-4">
+    <div *ngFor="let empleado of empleados" class="col-md-4" >
+        <div class="card " style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">{{empleado.name}}</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{empleado.departamentoName}}</li>
+            <li class="list-group-item">Lider: {{empleado.lider? 'Si': 'No'}}</li>
+            <li class="list-group-item">Lideres: {{empleado.lideres}}</li>
+          </ul>
+          <div class="card-body">
+            <a href="#" class="card-link" data-bs-toggle="modal" data-bs-target="#empleado" (click)="openEmpleadoModal(false, empleado.id)">Editar</a>
+            <a href="#" class="card-link" (click)="eliminarEmpleado(empleado.id)">Eliminar</a>
+          </div>
+        </div>
+      </div>
+  </div>
+
+</div>
+
+
+
+<div class="modal fade" id="departamento" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="createDepartamento()" #myForm="ngForm">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Nombre del departamento</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+              [(ngModel)]="departamento.nombre" [ngModelOptions]="{standalone: true}">
+          </div>
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="empleado" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Empleado</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="createEmpleado()" #myForm="ngForm">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Nombre del empleado</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+              [(ngModel)]="empleado.name" [ngModelOptions]="{standalone: true}">
+          </div>
+          <label for="selectDepartamento" class="form-label">Selecciona un departamento</label>
+          <select class="form-select" id="selectDepartamento" [(ngModel)]="empleado.departamentoId"
+            name="departamentoId">
+            <option *ngFor="let departamento of departamentos" [value]="departamento.id">{{ departamento.name }}
+            </option>
+          </select>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" [checked]="empleado.lider" (change)="toggleLider($event)" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Lider de ese departamento</label>
+          </div>
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
